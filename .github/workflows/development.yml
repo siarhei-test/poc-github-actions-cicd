@@ -71,6 +71,9 @@ jobs:
     environment: Development
     needs: get-updated-apps
     if: needs.get-updated-apps.outputs.configs != '[]'
+    steps:
+      - name: Approval for deployment and testing
+        run: echo "Deployment and testing for updated apps requires approval"
   setup-job:
     name: Setup data for deployment and testing
     runs-on: ubuntu-latest
@@ -97,7 +100,7 @@ jobs:
     permissions:
       contents: read
     environment: Development
-    needs: [get-updated-apps, setup-job]
+    needs: [get-updated-apps, approval_job, setup-job]
     strategy:
       fail-fast: false
       matrix:
