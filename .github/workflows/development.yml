@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    environment: ${{ needs.check-author-permissions-job.outputs.environment }}
+    environment: ${{ needs.check-workflow-permissions-job.outputs.environment }}
     needs: check-workflow-permissions-job
     steps:
       - name: Print deployment summary
