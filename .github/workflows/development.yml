@@ -68,6 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    environment: Development
     needs: get-updated-apps
     if: needs.get-updated-apps.outputs.configs != '[]'
     env:
@@ -87,6 +88,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    environment: Development
     needs: [get-updated-apps, setup-job]
     strategy:
       fail-fast: false
