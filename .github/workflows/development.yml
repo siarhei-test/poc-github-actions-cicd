@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
   pull_request_target:
 jobs:
-  check-author-permissions-job:
-    name: Check author permissions
+  check-workflow-permissions-job:
+    name: Check workflow permissions
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -22,13 +22,13 @@ jobs:
           else
             echo "environment=development_external" >> $GITHUB_OUTPUT
           fi
-  approve_workflow_job:
+  approve-workflow-job:
     name: Approve workflow
     runs-on: ubuntu-latest
     permissions:
       contents: read
     environment: ${{ needs.check-author-permissions-job.outputs.environment }}
-    needs: check-author-permissions-job
+    needs: check-workflow-permissions-job
     steps:
       - name: Print deployment summary
         run: |
@@ -39,13 +39,13 @@ jobs:
           echo "| **Author** | ${{ github.event.pull_request.user.login }} |" >> $GITHUB_STEP_SUMMARY
           echo "| **Branch** | \`${{ github.head_ref }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| **Target** | \`${{ github.event.pull_request.base.ref }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Environment** | \`${{ needs.get-environment.outputs.environment }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Environment** | \`${{ needs.check-workflow-permissions-job.outputs.environment }}\` |" >> $GITHUB_STEP_SUMMARY
   static-code-analysis-shellcheck:
     name: Static code analysis - shellcheck
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    needs: approve_workflow_job
+    needs: approve-workflow-job
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    needs: approve_workflow_job
+    needs: approve-workflow-job
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -71,7 +71,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    needs: approve_workflow_job
+    needs: approve-workflow-job
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
