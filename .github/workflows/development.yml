@@ -48,18 +48,6 @@ jobs:
         run: |
           echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
           echo "✅ Deployment has been approved and started to \`${{ needs.check-workflow-permissions-job.outputs.environment }}\`" >> $GITHUB_STEP_SUMMARY
-  rejected-workflow-job:
-    name: Deployment rejected
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    needs: approve-workflow-job
-    if: failure()
-    steps:
-      - name: Print rejection summary
-        run: |
-          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
-          echo "❌ Deployment has been rejected." >> $GITHUB_STEP_SUMMARY
   static-code-analysis-shellcheck:
     name: Static code analysis - shellcheck
     runs-on: ubuntu-latest
