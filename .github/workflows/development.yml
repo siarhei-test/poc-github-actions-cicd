@@ -72,8 +72,16 @@ jobs:
     needs: get-updated-apps
     if: needs.get-updated-apps.outputs.configs != '[]'
     steps:
-      - name: Approval for deployment and testing
-        run: echo "Deployment and testing for updated apps requires approval"
+      - name: Print deployment summary
+        run: |
+          echo "## Deployment Approval Summary" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| **PR** | #${{ github.event.pull_request.number }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Author** | ${{ github.event.pull_request.user.login }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Branch** | \`${{ github.head_ref }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Target** | \`${{ github.event.pull_request.base.ref }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Apps to deploy** | ${{ needs.get-updated-apps.outputs.configs }} |" >> $GITHUB_STEP_SUMMARY
   setup-job:
     name: Setup data for deployment and testing
     runs-on: ubuntu-latest
